@@ -1,4 +1,4 @@
-import { reactive } from '@vue/reactivity'
+import { reactive } from 'vue'
 import jwtDecode from 'jwt-decode'
 
 export interface KeycloakState {
