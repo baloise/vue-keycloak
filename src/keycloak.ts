@@ -5,11 +5,29 @@ type KeycloakInstance = Keycloak.KeycloakInstance | undefined
 
 let $keycloak: KeycloakInstance = undefined
 
+export async function isTokenReady(): Promise<void> {
+  return new Promise(resolve => checkToken(resolve))
+}
+
+const checkToken = (resolve: () => void) => {
+  if (
+    $keycloak !== undefined &&
+    $keycloak.token !== undefined &&
+    $keycloak.token !== null &&
+    $keycloak.token.length > 0
+  ) {
+    resolve()
+  } else {
+    setTimeout(() => checkToken(resolve), 500)
+  }
+}
+
 export function getKeycloak(): Keycloak.KeycloakInstance {
   return $keycloak as Keycloak.KeycloakInstance
 }
 
 export async function getToken(): Promise<string> {
+  await isTokenReady()
   if ($keycloak === undefined) {
     throw new Error('Keycloak was not initialized.')
   }
