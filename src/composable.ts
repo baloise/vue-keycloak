@@ -1,4 +1,4 @@
-import { toRefs, Ref } from '@vue/reactivity'
+import { toRefs, Ref } from 'vue'
 import { KeycloakState, state } from './state'
 
 export interface KeycloakComposable {

@@ -21,8 +21,8 @@
     "jsx": "react",
     "types": ["@types/jest"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "old/builder.type.ts", "old/builder.ts", "old/utils.ts", "old/rest.ts"],
-  "exclude": ["node_modules", "old"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "src/**/*.test.ts", "src/**/*.spec.ts"],
   "compileOnSave": false,
   "buildOnSave": false
 }

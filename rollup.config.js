@@ -15,5 +15,5 @@ export default {
       sourcemap: true,
     },
   ],
-  external: ['axios', 'vue'],
+  external: ['keycloak-js', 'jwt-decode', 'vue'],
 }
