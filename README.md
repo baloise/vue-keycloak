@@ -1,4 +1,18 @@
-# @baloise/vue-keycloak
+<table align="center" cellspacing="0" cellpadding="0" style="border: none;">
+<tr style="border: none;">
+  <td style="border: none;">
+    <img width="200px" src="https://vuejs.org/images/logo.png" />
+  </td>
+  <td style="border: none;">
+    <h1 style="font-size: 10em">+</h1>
+  </td>
+  <td style="border: none;">
+    <img width="200px" src="https://www.keycloak.org/resources/images/keycloak_logo_480x108.png" />
+  </td>
+</tr>
+</table>
+
+# vue-keycloak
 
 Keycloak plugin for Vue3 and Composition API
 
