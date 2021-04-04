@@ -1,11 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isPromise(promise: any): boolean {
-  return !!promise && typeof promise.then === 'function'
+  return !isNil(promise) && typeof promise.then === 'function'
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isFunction(fun: any): boolean {
-  return !!fun && typeof fun === 'function'
+  return !isNil(fun) && typeof fun === 'function'
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+export function isString(text: any): boolean {
+  return !isNil(text) && typeof text === 'string'
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any

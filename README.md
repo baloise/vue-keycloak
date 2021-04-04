@@ -14,11 +14,13 @@
 
 # vue-keycloak
 
-Keycloak plugin for Vue3 and Composition API
+A small wrapper library for the [Keycloak JavaScript adapter](https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter).
+
+> The library is made for [Vue 3.x.x](https://v3.vuejs.org/) and the [Composiotion API](https://v3.vuejs.org/api/composition-api.html).
 
 ## Instalation
 
-Install the [keycloak-js](https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter) package , [jwt-decode](https://www.npmjs.com/package/jwt-decode) to decode the jwt token and our wrapper library.
+Install the [keycloak-js](https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter) package , [jwt-decode](https://www.npmjs.com/package/jwt-decode) to decode the jwt token and our wrapper library with npm.
 
 ```bash
 npm install keycloak-js jwt-decode @baloise/vue-keycloak
@@ -26,13 +28,17 @@ npm install keycloak-js jwt-decode @baloise/vue-keycloak
 
 ## Use plugin
 
-```typescript
-import { createApp } from 'vue'
-import { vueKeycloak } from '@baloise/vue-keycloak'
-import App from './app/App.vue'
+Import the library into your `src/main.ts` file or any other entry point.
 
+```typescript
+import { vueKeycloak } from '@baloise/vue-keycloak'
+```
+
+Apply the library to the vue app instance.
+
+```typescript
 createApp(App).use(vueKeycloak, {
-  init: {
+  initOptions: {
     flow: 'standard', // default
     checkLoginIframe: false, // default
     onLoad: 'login-required', // default
@@ -45,7 +51,79 @@ createApp(App).use(vueKeycloak, {
 }).mount('#app')
 ```
 
-## Composable
+### Configuration
+
+| Config      | Type                                                                                       | Description                                             |
+| ----------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| initOptions | `Keycloak.KeycloakInitOptions`                                                             | `data` is the response that was provided by the server. |
+| config      | `string \| Keycloak.KeycloakConfig \| KeycloakConfigFactory \| KeycloakConfigAsyncFactory` | Keycloak configuration                                  |
+
+Use the example below to generate dynamic Keycloak conifiguration.
+
+```typescript
+app.use(vueKeycloak, async () => {
+  return {
+    config: {
+      url: (await getAuthBaseUrl()) + '/auth',
+      realm: 'myrealm',
+      clientId: 'myapp',
+    },
+    initOptions: {
+      onLoad: 'check-sso',
+      silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+    },
+  }
+})
+```
+
+Or load the Keycloak configuration from a json file.
+
+```typescript
+app.use(vueKeycloak, async () => {
+  return {
+    config: 'http://localhost:8080/myapp/keycloak.json',
+  }
+})
+```
+
+> It is also possible to access the keycloak instance with `getKeycloak()`
+
+## Use Token
+
+We export two helper functions for the token.
+
+### isTokenReady
+
+This functions returs a promise and only gets resolved if we have received a token.
+
+### getToken
+
+This promise returns a token. `isTokenReady` gets called inside this function.
+
+> Have a look at our [vueAxios](https://github.com/baloise/vue-axios) plugin.
+
+```typescript
+import { $axios } from '@baloise/vue-axios'
+import { getToken } from '@baloise/vue-keycloak'
+
+const axiosApiInstance = $axios.create()
+
+// Request interceptor for API calls
+axiosApiInstance.interceptors.request.use(
+  async config => {
+    const token = await getToken()
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+    }
+    return config
+  },
+  error => {
+    Promise.reject(error)
+  },
+)
+```
+
+## Composition API
 
 ```typescript
 import { computed, defineComponent } from 'vue'
@@ -63,6 +141,43 @@ export default defineComponent({
   },
 })
 ```
+
+### useKeycloak
+
+The `useKeycloak` function exposes the following reactive state.
+
+```typescript
+import { useKeycloak } from '@baloise/vue-keycloak'
+
+const {
+  isAuthenticated,
+  isPending,
+  hasFailed,
+  token,
+  username,
+  roles,
+
+  // Functions
+  hasRole,
+  hasRoles,
+} = useKeycloak()
+```
+
+| State           | Type            | Description                                            |
+| --------------- | --------------- | ------------------------------------------------------ |
+| isAuthenticated | `Ref<boolean>`  | If `true` the user is authenticated.                   |
+| isPending       | `Ref<boolean>`  | If `true` the authentication request is still pending. |
+| hasFailed       | `Ref<boolean>`  | If `true` authentication request has failed.           |
+| token           | `Ref<string>`   | `token` is the raw value of the JWT token.             |
+| username        | `Ref<string>`   | `username` the name of our user.                       |
+| roles           | `Ref<string[]>` | `roles` is a list of the users roles.                  |
+
+#### Functions
+
+| Function | Type                           | Description                                                  |
+| -------- | ------------------------------ | ------------------------------------------------------------ |
+| hasRole  | `(role: string) => boolean`    | `hasRole` returns true if the user has the given role.       |
+| hasRoles | `(roles: string[]) => boolean` | `hasRoles` returns true if the user has all the given roles. |
 
 # License
 

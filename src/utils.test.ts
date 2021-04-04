@@ -1,4 +1,4 @@
-import { isPromise, isFunction, isNil } from './utils'
+import { isPromise, isFunction, isNil, isString } from './utils'
 
 describe('util', () => {
   const obj = {}
@@ -22,6 +22,18 @@ describe('util', () => {
       expect(isFunction(obj)).toBe(false)
       expect(isFunction(undefined)).toBe(false)
       expect(isFunction(null)).toBe(false)
+    })
+  })
+
+  describe('isString', () => {
+    test('should return true if it is a valid string', () => {
+      expect(isString('')).toBe(true)
+      expect(isString('adsf')).toBe(true)
+      expect(isString(undefined)).toBe(false)
+      expect(isString(null)).toBe(false)
+      expect(isString(fun)).toBe(false)
+      expect(isString(prom)).toBe(false)
+      expect(isString(obj)).toBe(false)
     })
   })
 

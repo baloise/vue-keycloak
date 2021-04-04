@@ -4,54 +4,37 @@ import { defaultInitConfig } from './const'
 import { createKeycloak, initKeycloak } from './keycloak'
 import { isPromise, isFunction, isNil } from './utils'
 
-type KeycloakConfigFactory = () => Keycloak.KeycloakConfig
-type KeycloakConfigAsyncFactory = () => Promise<Keycloak.KeycloakConfig>
-
-interface VueKeycloakPluginConfig {
-  config: Keycloak.KeycloakConfig | KeycloakConfigFactory | KeycloakConfigAsyncFactory
-  init?: Keycloak.KeycloakInitOptions
+interface KeycloakPluginConfig {
+  config: string | Keycloak.KeycloakConfig
+  initOptions?: Keycloak.KeycloakInitOptions
 }
+
+type KeycloakConfigFactory = () => KeycloakPluginConfig
+type KeycloakConfigAsyncFactory = () => Promise<KeycloakPluginConfig>
+
+type VueKeycloakPluginConfig = KeycloakPluginConfig | KeycloakConfigFactory | KeycloakConfigAsyncFactory
 
 export const vueKeycloak: Plugin = {
   async install(app, options: VueKeycloakPluginConfig) {
-    let keycloakConfig: Keycloak.KeycloakConfig
-    if (isNil(options) || isNil(options.config)) {
+    if (isNil(options)) {
       throw new Error('The Keycloak.KeycloakConfig are requried')
     }
 
-    if (isPromise(options.config)) {
-      keycloakConfig = await (options.config as KeycloakConfigAsyncFactory)()
+    let keycloakPluginConfig: KeycloakPluginConfig
+    if (isPromise(options) || isFunction(options)) {
+      keycloakPluginConfig = await (options as KeycloakConfigAsyncFactory)()
     } else {
-      if (isFunction(options.config)) {
-        keycloakConfig = (options.config as KeycloakConfigFactory)()
-      } else {
-        keycloakConfig = options.config as Keycloak.KeycloakConfig
-      }
+      keycloakPluginConfig = options as KeycloakPluginConfig
     }
 
-    if (isNil(keycloakConfig)) {
-      throw new Error('The Keycloak.KeycloakConfig are requried')
-    }
-
-    if (isNil(keycloakConfig.clientId)) {
-      throw new Error('Client ID is missing in Keycloak.KeycloakConfig')
-    }
-
-    if (isNil(keycloakConfig.realm)) {
-      throw new Error('REALM is missing in Keycloak.KeycloakConfig')
-    }
-
-    if (isNil(keycloakConfig.url)) {
-      throw new Error('URL is missing in Keycloak.KeycloakConfig')
-    }
+    const keycloakConfig = keycloakPluginConfig.config
+    const keycloakInitOptions: Keycloak.KeycloakInitOptions = !isNil(keycloakPluginConfig.initOptions)
+      ? { ...defaultInitConfig, ...keycloakPluginConfig.initOptions }
+      : defaultInitConfig
 
     const _keycloak = createKeycloak(keycloakConfig)
     app.config.globalProperties.$keycloak = _keycloak
 
-    const initConfig: Keycloak.KeycloakInitOptions = !isNil(options.init) ? options.init : {}
-    await initKeycloak({
-      ...defaultInitConfig,
-      ...initConfig,
-    })
+    await initKeycloak(keycloakInitOptions)
   },
 }

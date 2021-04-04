@@ -81,7 +81,7 @@ describe('vueKeycloak', () => {
   test('should call init config and extend the default config', async () => {
     await vueKeycloak.install(appMock, {
       config: keycloakConfig,
-      init: {
+      initOptions: {
         flow: 'my-flow',
       },
     })

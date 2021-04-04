@@ -37,7 +37,7 @@ export async function getToken(): Promise<string> {
   return $keycloak.token
 }
 
-export function createKeycloak(config: Keycloak.KeycloakConfig): Keycloak.KeycloakInstance {
+export function createKeycloak(config: Keycloak.KeycloakConfig | string): Keycloak.KeycloakInstance {
   $keycloak = Keycloak(config)
   return getKeycloak()
 }
