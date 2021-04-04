@@ -26,9 +26,21 @@ interface TokenContent {
   }
 }
 
-export const updateState = (token: string): void => {
+export const updateToken = (token: string): void => {
   state.token = token
   const content = jwtDecode<TokenContent>(state.token)
   state.roles = content.realm_access.roles
   state.username = content.preferred_username
+}
+
+export const hasFailed = (value: boolean): void => {
+  state.hasFailed = value
+}
+
+export const isPending = (value: boolean): void => {
+  state.isPending = value
+}
+
+export const isAuthenticated = (value: boolean): void => {
+  state.isAuthenticated = value
 }

@@ -1,5 +1,6 @@
 import Keycloak from 'keycloak-js'
-import { state, updateState } from './state'
+import { hasFailed, isAuthenticated, isPending, updateToken } from './state'
+import { isNil } from './utils'
 
 type KeycloakInstance = Keycloak.KeycloakInstance | undefined
 
@@ -10,12 +11,7 @@ export async function isTokenReady(): Promise<void> {
 }
 
 const checkToken = (resolve: () => void) => {
-  if (
-    $keycloak !== undefined &&
-    $keycloak.token !== undefined &&
-    $keycloak.token !== null &&
-    $keycloak.token.length > 0
-  ) {
+  if (!isNil($keycloak) && !isNil($keycloak.token)) {
     resolve()
   } else {
     setTimeout(() => checkToken(resolve), 500)
@@ -33,12 +29,12 @@ export async function getToken(): Promise<string> {
   }
   try {
     await $keycloak.updateToken(10)
-    updateState($keycloak.token as string)
+    updateToken($keycloak.token as string)
   } catch (error) {
-    state.hasFailed = true
+    hasFailed(true)
     throw new Error('Failed to refresh the token, or the session has expired')
   }
-  return state.token
+  return $keycloak.token
 }
 
 export function createKeycloak(config: Keycloak.KeycloakConfig): Keycloak.KeycloakInstance {
@@ -48,16 +44,17 @@ export function createKeycloak(config: Keycloak.KeycloakConfig): Keycloak.Keyclo
 
 export async function initKeycloak(initConfig: Keycloak.KeycloakInitOptions): Promise<void> {
   try {
-    state.isPending = true
-    state.isAuthenticated = await $keycloak.init(initConfig)
-    if ($keycloak.token !== undefined && $keycloak.token !== null && $keycloak.token.length > 0) {
-      updateState($keycloak.token as string)
+    isPending(true)
+    const _isAuthenticated = await $keycloak.init(initConfig)
+    isAuthenticated(_isAuthenticated)
+    if (!isNil($keycloak.token)) {
+      updateToken($keycloak.token as string)
     }
   } catch (error) {
-    state.hasFailed = true
-    state.isAuthenticated = false
-    console.error('Could not read access token', error)
+    hasFailed(true)
+    isAuthenticated(false)
+    throw new Error('Could not read access token')
   } finally {
-    state.isPending = false
+    isPending(false)
   }
 }

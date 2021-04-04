@@ -63,3 +63,7 @@ export default defineComponent({
   },
 })
 ```
+
+# License
+
+Apache-2.0 Licensed | Copyright © 2021-present Gery Hirschfeld & Contributors

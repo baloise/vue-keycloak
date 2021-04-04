@@ -1,5 +1,6 @@
 import { toRefs, Ref } from 'vue'
 import { KeycloakState, state } from './state'
+import { isNil } from './utils'
 
 export interface KeycloakComposable {
   isAuthenticated: Ref<boolean>
@@ -15,7 +16,8 @@ export interface KeycloakComposable {
 export const useKeycloak = (): KeycloakComposable => {
   return {
     ...toRefs<KeycloakState>(state),
-    hasRole: (role: string) => state.isAuthenticated && state.roles.includes(role),
-    hasRoles: (roles: string[]) => state.isAuthenticated && roles.every(role => state.roles.includes(role)),
+    hasRole: (role: string) => !isNil(role) && state.isAuthenticated && state.roles.includes(role),
+    hasRoles: (roles: string[]) =>
+      !isNil(roles) && state.isAuthenticated && roles.every(role => state.roles.includes(role)),
   }
 }
