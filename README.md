@@ -53,10 +53,10 @@ createApp(App).use(vueKeycloak, {
 
 ### Configuration
 
-| Config      | Type                                                                                       | Description                                             |
-| ----------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
-| initOptions | `Keycloak.KeycloakInitOptions`                                                             | `data` is the response that was provided by the server. |
-| config      | `string \| Keycloak.KeycloakConfig \| KeycloakConfigFactory \| KeycloakConfigAsyncFactory` | Keycloak configuration                                  |
+| Config      | Type                                                                                       | Description                              |
+| ----------- | ------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| initOptions | `Keycloak.KeycloakInitOptions`                                                             | `initOptions` is Keycloak init options.  |
+| config      | `string \| Keycloak.KeycloakConfig \| KeycloakConfigFactory \| KeycloakConfigAsyncFactory` | `config` are the Keycloak configuration. |
 
 Use the example below to generate dynamic Keycloak conifiguration.
 
