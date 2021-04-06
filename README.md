@@ -53,10 +53,10 @@ createApp(App).use(vueKeycloak, {
 
 ### Configuration
 
-| Config      | Type                                                                                       | Description                              |
-| ----------- | ------------------------------------------------------------------------------------------ | ---------------------------------------- |
-| initOptions | `Keycloak.KeycloakInitOptions`                                                             | `initOptions` is Keycloak init options.  |
-| config      | `string \| Keycloak.KeycloakConfig \| KeycloakConfigFactory \| KeycloakConfigAsyncFactory` | `config` are the Keycloak configuration. |
+| Config      | Type                                | Description                              |
+| ----------- | ----------------------------------- | ---------------------------------------- |
+| initOptions | `Keycloak.KeycloakInitOptions`      | `initOptions` is Keycloak init options.  |
+| config      | `string \| Keycloak.KeycloakConfig` | `config` are the Keycloak configuration. |
 
 Use the example below to generate dynamic Keycloak conifiguration.
 
@@ -131,9 +131,9 @@ import { useKeycloak } from '@baloise/vue-keycloak'
 
 export default defineComponent({
   setup() {
-    const { hasRole, isPending } = useKeycloak()
+    const { hasRoles, isPending } = useKeycloak()
 
-    const hasAccess = computed(() => hasRole('RoleName'))
+    const hasAccess = computed(() => hasRoles(['RoleName']))
 
     return {
       hasAccess,
@@ -154,11 +154,11 @@ const {
   isPending,
   hasFailed,
   token,
+  decodedToken,
   username,
   roles,
 
   // Functions
-  hasRole,
   hasRoles,
 } = useKeycloak()
 ```
@@ -169,6 +169,7 @@ const {
 | isPending       | `Ref<boolean>`  | If `true` the authentication request is still pending. |
 | hasFailed       | `Ref<boolean>`  | If `true` authentication request has failed.           |
 | token           | `Ref<string>`   | `token` is the raw value of the JWT token.             |
+| decodedToken    | `Ref<T>`        | `decodedToken` is the decoded value of the JWT token.  |
 | username        | `Ref<string>`   | `username` the name of our user.                       |
 | roles           | `Ref<string[]>` | `roles` is a list of the users roles.                  |
 
@@ -176,7 +177,6 @@ const {
 
 | Function | Type                           | Description                                                  |
 | -------- | ------------------------------ | ------------------------------------------------------------ |
-| hasRole  | `(role: string) => boolean`    | `hasRole` returns true if the user has the given role.       |
 | hasRoles | `(roles: string[]) => boolean` | `hasRoles` returns true if the user has all the given roles. |
 
 # License

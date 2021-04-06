@@ -24,9 +24,7 @@ export function getKeycloak(): Keycloak.KeycloakInstance {
 
 export async function getToken(): Promise<string> {
   await isTokenReady()
-  if ($keycloak === undefined) {
-    throw new Error('Keycloak was not initialized.')
-  }
+
   try {
     await $keycloak.updateToken(10)
     updateToken($keycloak.token as string)

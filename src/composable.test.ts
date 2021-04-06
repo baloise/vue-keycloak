@@ -14,18 +14,6 @@ describe('useKeycloak', () => {
       expect(roles.value).toStrictEqual([])
     })
   })
-  describe('hasRole', () => {
-    test('should tell if the user has the role or not and is authenticated', () => {
-      state.isAuthenticated = true
-      state.roles = ['my-role']
-      const { hasRole } = useKeycloak()
-
-      expect(hasRole('my-role')).toBe(true)
-      expect(hasRole('not-my-role')).toBe(false)
-      expect(hasRole(undefined)).toBe(false)
-      expect(hasRole(null)).toBe(false)
-    })
-  })
   describe('hasRoles', () => {
     test('should tell if the user has the role or not and is authenticated', () => {
       state.isAuthenticated = true
