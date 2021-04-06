@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/baloise/vue-keycloak/compare/v1.1.0...v1.2.0) (2021-04-06)
+
+
+### Features
+
+* add decodedToken ([f778338](https://github.com/baloise/vue-keycloak/commit/f778338b5853d695bab7dc5a1a411b54f9d07e34))
+
 # [1.1.0](https://github.com/baloise/vue-keycloak/compare/v1.0.0...v1.1.0) (2021-04-04)
 
 
