@@ -1,4 +1,4 @@
-import { state, updateToken } from './state'
+import { state, setToken } from './state'
 
 describe('state', () => {
   const token =
@@ -14,7 +14,7 @@ describe('state', () => {
   })
 
   test('should update the state', () => {
-    updateToken(token)
+    setToken(token)
 
     expect(state.token).toBe(token)
     expect(state.username).toBe('my-name')

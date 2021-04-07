@@ -1,12 +1,12 @@
 import { createKeycloak, getToken, initKeycloak, isTokenReady } from './keycloak'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
-import { hasFailed, isAuthenticated, isPending, updateToken } from './state'
+import { hasFailed, isAuthenticated, isPending, setToken } from './state'
 import { defaultInitConfig } from './const'
 
 jest.mock('keycloak-js', () => jest.fn())
 jest.mock('./state', () => {
   return {
-    updateToken: jest.fn(),
+    setToken: jest.fn(),
     hasFailed: jest.fn(),
     isPending: jest.fn(),
     isAuthenticated: jest.fn(),
@@ -28,7 +28,7 @@ describe('keyckoak', () => {
 
   beforeEach(() => {
     ;(Keycloak as jest.Mock).mockClear()
-    ;(updateToken as jest.Mock).mockClear()
+    ;(setToken as jest.Mock).mockClear()
     ;(hasFailed as jest.Mock).mockClear()
     ;(isAuthenticated as jest.Mock).mockClear()
     ;(isPending as jest.Mock).mockClear()

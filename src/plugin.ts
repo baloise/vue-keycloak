@@ -2,17 +2,18 @@ import { Plugin } from 'vue'
 import Keycloak from 'keycloak-js'
 import { defaultInitConfig } from './const'
 import { createKeycloak, initKeycloak } from './keycloak'
-import { isPromise, isFunction, isNil } from './utils'
+import { isPromise, isFunction, isNil, isString } from './utils'
+import { loadJsonConfig } from './config'
 
 interface KeycloakPluginConfig {
-  config: string | Keycloak.KeycloakConfig
+  config: Keycloak.KeycloakConfig
   initOptions?: Keycloak.KeycloakInitOptions
 }
 
 type KeycloakConfigFactory = () => KeycloakPluginConfig
 type KeycloakConfigAsyncFactory = () => Promise<KeycloakPluginConfig>
 
-type VueKeycloakPluginConfig = KeycloakPluginConfig | KeycloakConfigFactory | KeycloakConfigAsyncFactory
+type VueKeycloakPluginConfig = string | KeycloakPluginConfig | KeycloakConfigFactory | KeycloakConfigAsyncFactory
 
 export const vueKeycloak: Plugin = {
   async install(app, options: VueKeycloakPluginConfig) {
@@ -21,7 +22,9 @@ export const vueKeycloak: Plugin = {
     }
 
     let keycloakPluginConfig: KeycloakPluginConfig
-    if (isPromise(options) || isFunction(options)) {
+    if (isString(options)) {
+      keycloakPluginConfig = await loadJsonConfig(options as string)
+    } else if (isPromise(options) || isFunction(options)) {
       keycloakPluginConfig = await (options as KeycloakConfigAsyncFactory)()
     } else {
       keycloakPluginConfig = options as KeycloakPluginConfig

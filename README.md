@@ -37,7 +37,9 @@ import { vueKeycloak } from '@baloise/vue-keycloak'
 Apply the library to the vue app instance.
 
 ```typescript
-createApp(App).use(vueKeycloak, {
+const app = createApp(App)
+
+app.use(vueKeycloak, {
   initOptions: {
     flow: 'standard', // default
     checkLoginIframe: false, // default
@@ -48,15 +50,21 @@ createApp(App).use(vueKeycloak, {
     realm: 'myrealm',
     clientId: 'myapp'
   }
-}).mount('#app')
+})
+```
+
+Or use a JSON file with the configs.
+
+```typescript
+app.use(vueKeycloak, '/keycloak.json')
 ```
 
 ### Configuration
 
-| Config      | Type                                | Description                              |
-| ----------- | ----------------------------------- | ---------------------------------------- |
-| initOptions | `Keycloak.KeycloakInitOptions`      | `initOptions` is Keycloak init options.  |
-| config      | `string \| Keycloak.KeycloakConfig` | `config` are the Keycloak configuration. |
+| Config      | Type                           | Description                              |
+| ----------- | ------------------------------ | ---------------------------------------- |
+| initOptions | `Keycloak.KeycloakInitOptions` | `initOptions` is Keycloak init options.  |
+| config      | `Keycloak.KeycloakConfig`      | `config` are the Keycloak configuration. |
 
 Use the example below to generate dynamic Keycloak conifiguration.
 
@@ -76,29 +84,15 @@ app.use(vueKeycloak, async () => {
 })
 ```
 
-Or load the Keycloak configuration from a json file.
-
-```typescript
-app.use(vueKeycloak, async () => {
-  return {
-    config: 'http://localhost:8080/myapp/keycloak.json',
-  }
-})
-```
-
 > It is also possible to access the keycloak instance with `getKeycloak()`
 
 ## Use Token
 
 We export two helper functions for the token.
 
-### isTokenReady
-
-This functions returs a promise and only gets resolved if we have received a token.
-
 ### getToken
 
-This promise returns a token. `isTokenReady` gets called inside this function.
+This function checks if the token is still valid and will update it if it is expired.
 
 > Have a look at our [vueAxios](https://github.com/baloise/vue-axios) plugin.
 
@@ -157,21 +151,23 @@ const {
   decodedToken,
   username,
   roles,
+  keycloak,
 
   // Functions
   hasRoles,
 } = useKeycloak()
 ```
 
-| State           | Type            | Description                                            |
-| --------------- | --------------- | ------------------------------------------------------ |
-| isAuthenticated | `Ref<boolean>`  | If `true` the user is authenticated.                   |
-| isPending       | `Ref<boolean>`  | If `true` the authentication request is still pending. |
-| hasFailed       | `Ref<boolean>`  | If `true` authentication request has failed.           |
-| token           | `Ref<string>`   | `token` is the raw value of the JWT token.             |
-| decodedToken    | `Ref<T>`        | `decodedToken` is the decoded value of the JWT token.  |
-| username        | `Ref<string>`   | `username` the name of our user.                       |
-| roles           | `Ref<string[]>` | `roles` is a list of the users roles.                  |
+| State           | Type                        | Description                                            |
+| --------------- | --------------------------- | ------------------------------------------------------ |
+| isAuthenticated | `Ref<boolean>`              | If `true` the user is authenticated.                   |
+| isPending       | `Ref<boolean>`              | If `true` the authentication request is still pending. |
+| hasFailed       | `Ref<boolean>`              | If `true` authentication request has failed.           |
+| token           | `Ref<string>`               | `token` is the raw value of the JWT token.             |
+| decodedToken    | `Ref<T>`                    | `decodedToken` is the decoded value of the JWT token.  |
+| username        | `Ref<string>`               | `username` the name of our user.                       |
+| roles           | `Ref<string[]>`             | `roles` is a list of the users roles.                  |
+| keycloak        | `Keycloak.KeycloakInstance` | `keycloak` is the instance of the keycloak-js adapter. |
 
 #### Functions
 

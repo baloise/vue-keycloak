@@ -28,7 +28,7 @@ interface TokenContent {
   }
 }
 
-export const updateToken = (token: string): void => {
+export const setToken = (token: string): void => {
   state.token = token
   const content = jwtDecode<TokenContent>(state.token)
   state.decodedToken = content

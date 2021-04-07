@@ -1,5 +1,5 @@
 import Keycloak from 'keycloak-js'
-import { hasFailed, isAuthenticated, isPending, updateToken } from './state'
+import { hasFailed, isAuthenticated, isPending, setToken } from './state'
 import { isNil } from './utils'
 
 type KeycloakInstance = Keycloak.KeycloakInstance | undefined
@@ -23,11 +23,29 @@ export function getKeycloak(): Keycloak.KeycloakInstance {
 }
 
 export async function getToken(): Promise<string> {
-  await isTokenReady()
+  return updateToken()
+}
+
+export async function isLoggedIn(): Promise<boolean> {
+  try {
+    if (!$keycloak.authenticated) {
+      return false
+    }
+    await this.updateToken()
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+export async function updateToken(): Promise<string> {
+  if (!$keycloak) {
+    throw new Error('Keycloak is not initialized.')
+  }
 
   try {
     await $keycloak.updateToken(10)
-    updateToken($keycloak.token as string)
+    setToken($keycloak.token as string)
   } catch (error) {
     hasFailed(true)
     throw new Error('Failed to refresh the token, or the session has expired')
@@ -46,8 +64,11 @@ export async function initKeycloak(initConfig: Keycloak.KeycloakInitOptions): Pr
     const _isAuthenticated = await $keycloak.init(initConfig)
     isAuthenticated(_isAuthenticated)
     if (!isNil($keycloak.token)) {
-      updateToken($keycloak.token as string)
+      setToken($keycloak.token as string)
     }
+
+    $keycloak.onAuthRefreshSuccess = () => setToken($keycloak.token as string)
+    $keycloak.onTokenExpired = () => updateToken()
   } catch (error) {
     hasFailed(true)
     isAuthenticated(false)
