@@ -10,6 +10,7 @@ jest.mock('./state', () => {
     hasFailed: jest.fn(),
     isPending: jest.fn(),
     isAuthenticated: jest.fn(),
+    isInitialized: jest.fn(),
   }
 })
 

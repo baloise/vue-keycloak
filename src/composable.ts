@@ -6,6 +6,7 @@ import { isNil } from './utils'
 
 export interface KeycloakComposable {
   isAuthenticated: Ref<boolean>
+  isInitialized: Ref<boolean>
   hasFailed: Ref<boolean>
   isPending: Ref<boolean>
   token: Ref<string>

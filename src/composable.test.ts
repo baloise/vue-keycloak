@@ -4,9 +4,10 @@ import { state } from './state'
 describe('useKeycloak', () => {
   describe('state', () => {
     test('should return the state values as refs', () => {
-      const { isAuthenticated, hasFailed, isPending, token, username, roles } = useKeycloak()
+      const { isAuthenticated, isInitialized, hasFailed, isPending, token, username, roles } = useKeycloak()
 
       expect(isAuthenticated.value).toBe(false)
+      expect(isInitialized.value).toBe(false)
       expect(hasFailed.value).toBe(false)
       expect(isPending.value).toBe(false)
       expect(token.value).toBe('')

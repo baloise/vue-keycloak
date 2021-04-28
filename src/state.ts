@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode'
 
 export interface KeycloakState<T = unknown> {
   isAuthenticated: boolean
+  isInitialized: boolean
   hasFailed: boolean
   isPending: boolean
   token: string
@@ -13,6 +14,7 @@ export interface KeycloakState<T = unknown> {
 
 export const state = reactive<KeycloakState>({
   isAuthenticated: false,
+  isInitialized: false,
   hasFailed: false,
   isPending: false,
   token: '',
@@ -34,6 +36,10 @@ export const setToken = (token: string): void => {
   state.decodedToken = content
   state.roles = content.realm_access.roles
   state.username = content.preferred_username
+}
+
+export const isInitialized = (value: boolean): void => {
+  state.isInitialized = value
 }
 
 export const hasFailed = (value: boolean): void => {

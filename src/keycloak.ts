@@ -1,5 +1,5 @@
 import Keycloak from 'keycloak-js'
-import { hasFailed, isAuthenticated, isPending, setToken } from './state'
+import { hasFailed, isAuthenticated, isInitialized, isPending, setToken } from './state'
 import { isNil } from './utils'
 
 type KeycloakInstance = Keycloak.KeycloakInstance | undefined
@@ -61,6 +61,7 @@ export function createKeycloak(config: Keycloak.KeycloakConfig | string): Keyclo
 export async function initKeycloak(initConfig: Keycloak.KeycloakInitOptions): Promise<void> {
   try {
     isPending(true)
+    isInitialized(false)
     const _isAuthenticated = await $keycloak.init(initConfig)
     isAuthenticated(_isAuthenticated)
     if (!isNil($keycloak.token)) {
@@ -75,5 +76,6 @@ export async function initKeycloak(initConfig: Keycloak.KeycloakInitOptions): Pr
     throw new Error('Could not read access token')
   } finally {
     isPending(false)
+    isInitialized(true)
   }
 }

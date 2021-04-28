@@ -145,6 +145,7 @@ import { useKeycloak } from '@baloise/vue-keycloak'
 
 const {
   isAuthenticated,
+  isInitialized,
   isPending,
   hasFailed,
   token,
@@ -161,6 +162,7 @@ const {
 | State           | Type                        | Description                                            |
 | --------------- | --------------------------- | ------------------------------------------------------ |
 | isAuthenticated | `Ref<boolean>`              | If `true` the user is authenticated.                   |
+| isInitialized   | `Ref<boolean>`              | If `true` the keycloak init operation has finished     |
 | isPending       | `Ref<boolean>`              | If `true` the authentication request is still pending. |
 | hasFailed       | `Ref<boolean>`              | If `true` authentication request has failed.           |
 | token           | `Ref<string>`               | `token` is the raw value of the JWT token.             |
