@@ -9,6 +9,7 @@ export interface KeycloakState<T = unknown> {
   decodedToken: T
   username: string
   roles: string[]
+  resourceRoles: Record<string, string[]>
 }
 
 export const state = reactive<KeycloakState>({
@@ -19,6 +20,7 @@ export const state = reactive<KeycloakState>({
   decodedToken: {},
   username: '',
   roles: [] as string[],
+  resourceRoles: {},
 })
 
 interface TokenContent {
@@ -26,6 +28,7 @@ interface TokenContent {
   realm_access: {
     roles: string[]
   }
+  resource_access: Record<string, { roles: string[] }>
 }
 
 export const setToken = (token: string): void => {
@@ -34,6 +37,9 @@ export const setToken = (token: string): void => {
   state.decodedToken = content
   state.roles = content.realm_access.roles
   state.username = content.preferred_username
+  state.resourceRoles = content.resource_access ? Object.fromEntries(
+    Object.entries(content.resource_access).map(([key, value]) => [key, value.roles]),
+  ) : {};
 }
 
 export const hasFailed = (value: boolean): void => {
