@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/baloise/vue-keycloak/compare/v1.3.0...v1.4.0) (2021-08-02)
+
+
+### Features
+
+* add support for resource roles ([7908cf0](https://github.com/baloise/vue-keycloak/commit/7908cf0629ba4998b1ea49253ff3f309a6a2bbed))
+
 # [1.3.0](https://github.com/baloise/vue-keycloak/compare/v1.2.0...v1.3.0) (2021-04-07)
 
 
