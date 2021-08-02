@@ -26,4 +26,20 @@ describe('useKeycloak', () => {
       expect(hasRoles(null)).toBe(false)
     })
   })
+  describe('hasResourceRoles', () => {
+    test('should tell if the user has the role in a resource or not and is authenticated', () => {
+      state.isAuthenticated = true
+      state.resourceRoles = { myApp: ['my-role', 'my-other-role'] }
+      const { hasResourceRoles } = useKeycloak()
+
+      expect(hasResourceRoles(['my-role', 'my-other-role'], 'myApp')).toBe(true)
+      expect(hasResourceRoles(['my-role', 'not-my-role'], 'myApp')).toBe(false)
+      expect(hasResourceRoles(['my-role', 'my-other-role'], undefined)).toBe(false)
+      expect(hasResourceRoles(['my-role', 'my-other-role'], null)).toBe(false)
+      expect(hasResourceRoles(undefined, undefined)).toBe(false)
+      expect(hasResourceRoles(undefined, 'myApp')).toBe(false)
+      expect(hasResourceRoles(null, null)).toBe(false)
+      expect(hasResourceRoles(null, 'myApp')).toBe(false)
+    })
+  })
 })

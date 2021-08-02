@@ -151,29 +151,33 @@ const {
   decodedToken,
   username,
   roles,
+  resourceRoles,
   keycloak,
 
   // Functions
   hasRoles,
+  hasResourceRoles,
 } = useKeycloak()
 ```
 
-| State           | Type                        | Description                                            |
-| --------------- | --------------------------- | ------------------------------------------------------ |
-| isAuthenticated | `Ref<boolean>`              | If `true` the user is authenticated.                   |
-| isPending       | `Ref<boolean>`              | If `true` the authentication request is still pending. |
-| hasFailed       | `Ref<boolean>`              | If `true` authentication request has failed.           |
-| token           | `Ref<string>`               | `token` is the raw value of the JWT token.             |
-| decodedToken    | `Ref<T>`                    | `decodedToken` is the decoded value of the JWT token.  |
-| username        | `Ref<string>`               | `username` the name of our user.                       |
-| roles           | `Ref<string[]>`             | `roles` is a list of the users roles.                  |
-| keycloak        | `Keycloak.KeycloakInstance` | `keycloak` is the instance of the keycloak-js adapter. |
+| State           | Type                           | Description                                                         |
+| --------------- | ------------------------------ | ------------------------------------------------------------------- |
+| isAuthenticated | `Ref<boolean>`                 | If `true` the user is authenticated.                                |
+| isPending       | `Ref<boolean>`                 | If `true` the authentication request is still pending.              |
+| hasFailed       | `Ref<boolean>`                 | If `true` authentication request has failed.                        |
+| token           | `Ref<string>`                  | `token` is the raw value of the JWT token.                          |
+| decodedToken    | `Ref<T>`                       | `decodedToken` is the decoded value of the JWT token.               |
+| username        | `Ref<string>`                  | `username` the name of our user.                                    |
+| roles           | `Ref<string[]>`                | `roles` is a list of the users roles.                               |
+| resourceRoles   | `Ref<Record<string, string[]>` | `resourceRoles` is a list of the users roles in specific resources. |
+| keycloak        | `Keycloak.KeycloakInstance`    | `keycloak` is the instance of the keycloak-js adapter.              |
 
 #### Functions
 
-| Function | Type                           | Description                                                  |
-| -------- | ------------------------------ | ------------------------------------------------------------ |
-| hasRoles | `(roles: string[]) => boolean` | `hasRoles` returns true if the user has all the given roles. |
+| Function         | Type                                             | Description                                                                        |
+| ---------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| hasRoles         | `(roles: string[]) => boolean`                   | `hasRoles` returns true if the user has all the given roles.                       |
+| hasResourceRoles | `(roles: string[], resource: string) => boolean` | `hasResourceRoles` returns true if the user has all the given roles in a resource. |
 
 # License
 
