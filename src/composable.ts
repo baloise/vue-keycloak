@@ -1,5 +1,5 @@
 import { KeycloakInstance } from 'keycloak-js'
-import { toRefs, Ref } from 'vue'
+import { toRefs, Ref } from 'vue-demi'
 import { getKeycloak } from './keycloak'
 import { KeycloakState, state } from './state'
 import { isNil } from './utils'
