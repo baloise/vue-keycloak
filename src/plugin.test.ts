@@ -1,7 +1,11 @@
+import { isVue2, isVue3, Vue2 } from 'vue-demi'
 import { KeycloakConfig } from 'keycloak-js'
 import { vueKeycloak } from './plugin'
 import { createKeycloak, initKeycloak } from './keycloak'
 import { defaultInitConfig } from './const'
+
+const testVue3 = isVue3 ? test : test.skip
+const testVue2 = isVue2 ? test : test.skip
 
 jest.mock('./keycloak', () => {
   return {
@@ -64,10 +68,18 @@ describe('vueKeycloak', () => {
     }
   })
 
-  test('should set globalProperties', async () => {
+  testVue3('should set $keycloak in globalProperties', async () => {
     await vueKeycloak.install(appMock, { config: keycloakConfig })
 
     expect(appMock.config.globalProperties.$keycloak).toBeDefined()
+    expect(createKeycloak as jest.Mock).toBeCalled()
+    expect(initKeycloak as jest.Mock).toBeCalled()
+  })
+
+  testVue2('should set $keycloak in prototype', async () => {
+    await vueKeycloak.install(appMock, { config: keycloakConfig })
+
+    expect(Vue2.prototype.$keycloak).toBeDefined()
     expect(createKeycloak as jest.Mock).toBeCalled()
     expect(initKeycloak as jest.Mock).toBeCalled()
   })

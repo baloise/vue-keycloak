@@ -12,8 +12,8 @@ export default {
       dir: 'dist/',
       format: 'commonjs',
       preferConst: true,
-      sourcemap: true,
-    },
+      sourcemap: true
+    }
   ],
-  external: ['keycloak-js', 'jwt-decode', 'vue'],
+  external: ['keycloak-js', 'jwt-decode', 'vue-demi', 'vue']
 }

@@ -11,7 +11,7 @@ describe('state', () => {
     expect(state.token).toBe('')
     expect(state.username).toBe('')
     expect(state.roles).toStrictEqual([])
-    expect(state.resourceRoles).toStrictEqual({});
+    expect(state.resourceRoles).toStrictEqual({})
   })
 
   test('should update the state', () => {

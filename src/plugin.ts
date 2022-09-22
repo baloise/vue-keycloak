@@ -1,4 +1,4 @@
-import { Plugin } from 'vue'
+import { Plugin, isVue3, Vue2 } from 'vue-demi'
 import Keycloak from 'keycloak-js'
 import { defaultInitConfig } from './const'
 import { createKeycloak, initKeycloak } from './keycloak'
@@ -36,7 +36,11 @@ export const vueKeycloak: Plugin = {
       : defaultInitConfig
 
     const _keycloak = createKeycloak(keycloakConfig)
-    app.config.globalProperties.$keycloak = _keycloak
+    if (isVue3) {
+      app.config.globalProperties.$keycloak = _keycloak
+    } else {
+      Vue2.prototype.$keycloak = _keycloak
+    }
 
     await initKeycloak(keycloakInitOptions)
   },

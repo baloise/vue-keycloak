@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive } from 'vue-demi'
 import jwtDecode from 'jwt-decode'
 
 export interface KeycloakState<T = unknown> {
@@ -37,9 +37,9 @@ export const setToken = (token: string): void => {
   state.decodedToken = content
   state.roles = content.realm_access.roles
   state.username = content.preferred_username
-  state.resourceRoles = content.resource_access ? Object.fromEntries(
-    Object.entries(content.resource_access).map(([key, value]) => [key, value.roles]),
-  ) : {};
+  state.resourceRoles = content.resource_access
+    ? Object.fromEntries(Object.entries(content.resource_access).map(([key, value]) => [key, value.roles]))
+    : {}
 }
 
 export const hasFailed = (value: boolean): void => {
