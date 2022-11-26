@@ -1,16 +1,17 @@
 export default {
   input: 'dist-transpiled/index.js',
+  type: "module",
   output: [
     {
       dir: 'dist/',
-      entryFileNames: '[name].esm.js',
-      chunkFileNames: '[name]-[hash].esm.js',
-      format: 'es',
+      entryFileNames: '[name].cjs.js',
+      chunkFileNames: '[name]-[hash].cjs.js',
+      format: 'cjs',
       sourcemap: true,
     },
     {
       dir: 'dist/',
-      format: 'commonjs',
+      format: 'cjs',
       preferConst: true,
       sourcemap: true,
     },
