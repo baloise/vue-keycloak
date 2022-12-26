@@ -44,7 +44,7 @@ app.use(vueKeycloak, {
     flow: 'standard', // default
     checkLoginIframe: false, // default
     onLoad: 'login-required', // default
-  }
+  },
   config: {
     url: 'http://keycloak-server/auth',
     realm: 'myrealm',
